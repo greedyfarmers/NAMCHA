@@ -103,7 +103,8 @@ img{max-width:100%}
 <div>
   <div style="position:relative;min-height:clamp(460px,52vw,620px);background:#0b1220;overflow:hidden;display:flex">
     <img src="assets/factory-aerial.jpg" alt="생산 시설" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
-    <div style="position:absolute;inset:0;background:linear-gradient(95deg,rgba(6,12,24,.95) 0%,rgba(7,15,30,.8) 46%,rgba(8,18,36,.3) 100%)"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(95deg,rgba(6,12,24,.95) 0%,rgba(7,15,30,.82) 46%,rgba(8,18,36,.42) 100%)"></div>
+    <canvas id="hero-net" style="position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none"></canvas>
     <div style="position:relative;display:flex;flex-direction:column;justify-content:center;padding:clamp(52px,6.5vw,92px) clamp(20px,4vw,64px) clamp(92px,10vw,120px);max-width:760px;color:#fff">
       <div style="font:700 12px/1.6 Pretendard,sans-serif;letter-spacing:.14em;color:#7cb2ff">더 나은 바람을 위한 기술</div>
       <h1 style="margin:22px 0 0;font-size:clamp(30px,4.6vw,54px);line-height:1.2;font-weight:800;letter-spacing:-.03em;word-break:keep-all">실링팬 전문 제조기업<br><span style="color:#4d90f5">NAMCHA BARWA</span><br>ELECTRONICS</h1>
@@ -1365,6 +1366,9 @@ class Component extends DCLogic {
     clearInterval(this.timer); clearInterval(this.videoTimer);
     clearInterval(this._rowTimer); clearTimeout(this._revealTimer);
     cancelAnimationFrame(this._raf);
+    cancelAnimationFrame(this._netRaf);
+    window.removeEventListener("pointermove", this._netMove);
+    window.removeEventListener("resize", this._netResize);
     window.removeEventListener("pointermove", this._onMove);
     window.removeEventListener("pointerdown", this._onMove);
     document.removeEventListener("mouseleave", this._onLeave);
@@ -1377,6 +1381,7 @@ class Component extends DCLogic {
     if (prevState && prevState.page !== this.state.page) window.scrollTo({ left: 0, top: 0 });
     this.syncReveal();
     this.syncAutoRows();
+    if (this.state.page === "home") this.initHeroNet(); else { cancelAnimationFrame(this._netRaf); this._netCanvas = null; }
   }
   componentDidMount() {
     this.timer = setInterval(() => {
@@ -1385,11 +1390,97 @@ class Component extends DCLogic {
     this.playHero();
     this.videoTimer = setInterval(this.playHero, 1500);
     this.initCursor();
+    this.initHeroNet();
     document.addEventListener("visibilitychange", this.playHero);
     this.syncReveal();
     this.syncAutoRows();
+    if (this.state.page === "home") this.initHeroNet(); else { cancelAnimationFrame(this._netRaf); this._netCanvas = null; }
     try { this.syncMap(); } catch (e) { console.warn("map init failed", e && e.message); this.mapFallback(document.getElementById("nb-map")); }
     window.addEventListener("load", () => this.syncReveal());
+  }
+
+  initHeroNet() {
+    const canvas = document.getElementById("hero-net");
+    if (!canvas || this._netCanvas === canvas) return;
+    cancelAnimationFrame(this._netRaf);
+    this._netCanvas = canvas;
+    const ctx = canvas.getContext("2d");
+    const mouse = { x: null, y: null, r: 170 };
+    let dots = [];
+
+    const sizeUp = () => {
+      const r = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.round(r.width * dpr));
+      canvas.height = Math.max(1, Math.round(r.height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      this._netW = r.width; this._netH = r.height;
+      dots = [];
+      const n = Math.min(140, Math.round((r.width * r.height) / 12000));
+      for (let i = 0; i < n; i++) {
+        dots.push({
+          x: Math.random() * r.width, y: Math.random() * r.height,
+          vx: (Math.random() * 0.4) - 0.2, vy: (Math.random() * 0.4) - 0.2,
+          s: (Math.random() * 1.6) + 0.8
+        });
+      }
+    };
+
+    this._netMove = (e) => {
+      const r = canvas.getBoundingClientRect();
+      const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+      mouse.x = inside ? e.clientX - r.left : null;
+      mouse.y = inside ? e.clientY - r.top : null;
+    };
+    this._netResize = sizeUp;
+    window.addEventListener("pointermove", this._netMove, { passive: true });
+    window.addEventListener("resize", this._netResize);
+    sizeUp();
+
+    const link = 130;
+    const draw = () => {
+      const W = this._netW, H = this._netH;
+      ctx.clearRect(0, 0, W, H);
+      for (const d of dots) {
+        if (d.x < 0 || d.x > W) d.vx = -d.vx;
+        if (d.y < 0 || d.y > H) d.vy = -d.vy;
+        if (mouse.x !== null) {
+          const dx = mouse.x - d.x, dy = mouse.y - d.y;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          if (dist < mouse.r + d.s) {
+            const f = (mouse.r - dist) / mouse.r;
+            d.x -= (dx / dist) * f * 3.2;
+            d.y -= (dy / dist) * f * 3.2;
+          }
+        }
+        d.x += d.vx; d.y += d.vy;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.s, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(124,178,255,.85)";
+        ctx.fill();
+      }
+      ctx.lineWidth = 1;
+      for (let a = 0; a < dots.length; a++) {
+        for (let b = a + 1; b < dots.length; b++) {
+          const dx = dots[a].x - dots[b].x, dy = dots[a].y - dots[b].y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 > link * link) continue;
+          const o = 1 - Math.sqrt(d2) / link;
+          let hot = false;
+          if (mouse.x !== null) {
+            const mx = dots[a].x - mouse.x, my = dots[a].y - mouse.y;
+            hot = (mx * mx + my * my) < mouse.r * mouse.r;
+          }
+          ctx.strokeStyle = hot ? "rgba(255,255,255," + (o * 0.7) + ")" : "rgba(77,144,245," + (o * 0.5) + ")";
+          ctx.beginPath();
+          ctx.moveTo(dots[a].x, dots[a].y);
+          ctx.lineTo(dots[b].x, dots[b].y);
+          ctx.stroke();
+        }
+      }
+      this._netRaf = requestAnimationFrame(draw);
+    };
+    draw();
   }
 
   initCursor() {
