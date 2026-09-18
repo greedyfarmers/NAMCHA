@@ -52,7 +52,8 @@ h1,h2,h3{letter-spacing:-.025em}
 .wrapsec > div:not(.bleed){padding-left:max(24px,calc((100% - 1200px)/2)) !important;padding-right:max(24px,calc((100% - 1200px)/2)) !important}
 .wrapsec > div:not(.bleed) > div[style*="max-width:1180px"],.wrapsec > div:not(.bleed) > div[style*="max-width:1200px"]{max-width:none !important}
 .wrapsec > div:not(.bleed) > *{min-width:0}
-.bleed > div:not([style*="position: absolute"]){padding-left:max(24px,calc((100% - 1200px)/2)) !important;padding-right:max(24px,calc((100% - 1200px)/2)) !important}
+.bleed > div:not([style*="position: absolute"]):not(.auto-row):not(.slide-track):not(.prod-row):not(.cert-scroll):not(.cert-loop){box-sizing:border-box;max-width:1248px;margin-left:auto !important;margin-right:auto !important;padding-left:24px !important;padding-right:24px !important}
+.bleed > .cert-scroll,.bleed > .auto-row,.bleed > .prod-row{box-sizing:border-box}
 .wrapsec img,.wrapsec video,.wrapsec iframe{max-width:100%}
 @media (max-width:768px){
   .wrapsec > div:not(.bleed){padding-left:clamp(16px,5vw,24px) !important;padding-right:clamp(16px,5vw,24px) !important}
