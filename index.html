@@ -554,7 +554,6 @@ html,body{max-width:100%;overflow-x:hidden}
           <div style="width:clamp(260px,26vw,340px);flex:none;background:#F3F5F8;border-radius:18px;padding:clamp(20px,2vw,26px);display:flex;flex-direction:column;cursor:pointer" onClick="{{ goProducts }}">
             <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
               <span style="padding:6px 13px;border-radius:999px;background:#1F6FEB;color:#fff;font:700 11px/1 Pretendard,sans-serif">{{ p.size }}</span>
-              <span style="padding:6px 13px;border-radius:999px;background:#fff;font:600 11px/1 Pretendard,sans-serif;color:#5C6B80">{{ p.status }}</span>
             </div>
             <div style="margin-top:18px;font-size:clamp(17px,1.7vw,20px);font-weight:700;line-height:1.45;letter-spacing:-.02em;color:#1E2A3C;word-break:keep-all">{{ p.name }}</div>
             <div style="display:grid;grid-template-columns:1fr auto;gap:8px 14px;margin-top:16px;padding-top:14px;border-top:1px solid #E2E7EF">
@@ -1986,19 +1985,19 @@ const STEPS = [
 const GROUPS = { s42: "42인치", s48: "48인치", s52: "52인치" };
 
 const PRODUCTS = [
-  { img: "assets/fan-silver-black.jpg", code: "SENA-42", name: "SENA 세나 42인치", size: '42" / 1070mm', cat: "실링팬", group: "42인치", status: "IoT · BLDC", real: true,
+  { img: "assets/fan-silver-black.jpg", code: "NB-1", name: "NB-1", size: '42" / 1070mm', cat: "실링팬", group: "42인치", status: "IoT · BLDC", real: true,
     colors: "새틴실버 × 화이트 · 메이플 · 다크월넛 · 블랙",
     desc: "작은 방과 서재에 맞춘 42인치 모델입니다. BLDC 모터와 LED 조명, IoT 스마트 제어를 지원합니다." },
-  { img: "assets/fan-white-walnut.jpg", code: "SENA-52", name: "SENA 세나 52인치", size: '52" / 1320mm', cat: "실링팬", group: "52인치", status: "IoT · BLDC", real: true,
+  { img: "assets/fan-white-walnut.jpg", code: "NB-2", name: "NB-2", size: '52" / 1320mm', cat: "실링팬", group: "52인치", status: "IoT · BLDC", real: true,
     colors: "화이트 · 블랙 × 메이플 · 다크월넛 · 베이지오크",
     desc: "거실 기준 대표 모델입니다. 저소음 BLDC 모터와 무광 글라스 LED를 적용했습니다." },
-  { img: "assets/fan-satin-maple.jpg", code: "VANE-48", name: "VANE 베인 48인치", size: '48" / 1220mm', cat: "실링팬", group: "48인치", status: "IoT · BLDC", real: true,
+  { img: "assets/fan-satin-maple.jpg", code: "NB-3", name: "NB-3", size: '48" / 1220mm', cat: "실링팬", group: "48인치", status: "IoT · BLDC", real: true,
     colors: "화이트 · 블랙 · 새틴실버 × 우드 · 반투명",
     desc: "바디와 블레이드 컬러를 조합할 수 있는 48인치 모델입니다. LED 조명과 리모컨 제어를 기본으로 갖췄습니다." },
-  { img: "assets/fan-pearl-maple.jpg", code: "MOAH-52", name: "MOAH 모아 52인치", size: '52" / 1320mm', cat: "실링팬", group: "52인치", status: "IoT · BLDC", real: true,
+  { img: "assets/fan-pearl-maple.jpg", code: "NB-4", name: "NB-4", size: '52" / 1320mm', cat: "실링팬", group: "52인치", status: "IoT · BLDC", real: true,
     colors: "화이트 · 블랙 · 새틴실버 × 우드 5종",
     desc: "넓은 거실을 위한 52인치 모델입니다. 우드 블레이드를 포함한 다양한 컬러 조합을 제공합니다." },
-  { img: "assets/fan-white-white.jpg", code: "ESSENTIAL", name: "에센셜 실링팬 BLDC", size: "LED 조명 일체형", cat: "실링팬", group: "52인치", status: "LCD 리모컨", real: true,
+  { img: "assets/fan-white-white.jpg", code: "NB-5", name: "NB-5", size: "LED 조명 일체형", cat: "실링팬", group: "52인치", status: "LCD 리모컨", real: true,
     colors: "화이트",
     desc: "LCD 리모컨 하나로 바람과 조명을 함께 제어하는 기본형 모델입니다." }
 ];
