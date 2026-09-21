@@ -949,17 +949,6 @@ html,body{max-width:100%;overflow-x:hidden}
     </div>
   </div>
 
-  <div style="padding:clamp(52px,7vw,84px) clamp(20px,4vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(30px,4vw,56px);align-items:start;border-top:1px solid #E2E7EF">
-    <div>
-      <h2 style="margin:0;font-size:clamp(22px,2.6vw,30px);font-weight:700;letter-spacing:-.03em">{{ t.u41 }}</h2>
-      <div style="margin-top:10px;font-size:13px;font-weight:500;color:#1F6FEB">Corporate Information</div>
-    </div>
-    <div style="border-top:2px solid #0B1526">
-      <sc-for list="{{ companyFacts }}" as="f" hint-placeholder-count="5">
-        <div style="display:grid;grid-template-columns:112px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid #E2E7EF;font-size:14px"><span style="color:#6B7A8D">{{ f.k }}</span><span style="font-weight:500">{{ f.v }}</span></div>
-      </sc-for>
-    </div>
-  </div>
 
   <div id="about-history" style="padding:clamp(52px,7vw,88px) clamp(20px,4vw,64px);background:#FFFFFF;color:#0B1526">
     <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:baseline">
